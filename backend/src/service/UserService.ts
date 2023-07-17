@@ -32,15 +32,4 @@ export default class UserService {
     const token = jwtHash(userToToken);
     return token;
   }
-
-  update = async (user: TUser, token: string): Promise<string> => {
-    const { name, login } = jwtVerify(token);
-    if (name !== user.name || login !== user.login) throw new BadRequest('Cannot chande infos');
-    const userInfo = userSchema.safeParse(user);
-    if(!userInfo.success) throw new BadRequest(userInfo.error.message);
-    const passwordCrypt = await crypto(user.password);
-    const userToToken = await this.model.update({...user, password: passwordCrypt});
-    const tokenUp = jwtHash(userToToken);
-    return tokenUp;
-  }
 }

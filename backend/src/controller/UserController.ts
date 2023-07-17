@@ -35,20 +35,4 @@ export default class UserController {
       next(error);
     }
   }
-
-  updateUser = async (req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<Response | void> => {
-    try {
-      const  { login, password, name } = req.body;
-      const { token } = req.params;
-      const onlyToken = token.split(" ")[1];
-      const tokenUpdate = await this
-        .service.update({ login, password, name }, onlyToken);
-      return res.status(StatusCodes.OK).json(tokenUpdate);
-    } catch (error) {
-      next(error);
-    }
-  }
 }

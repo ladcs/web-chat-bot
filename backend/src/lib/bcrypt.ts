@@ -3,10 +3,9 @@ import bcrypt from 'bcrypt';
 
 dotenv.config()
 
-const SUPER_SECRET = process.env.BYCRIPT_SECRET ?? 123456789;
-
 export const crypto = async (password: string): Promise<string> => {
-  const passwordHash = await bcrypt.hash(password, SUPER_SECRET)
+  const salt = await bcrypt.genSalt(10);
+  const passwordHash = await bcrypt.hash(password, salt)
   return passwordHash;
 }
 

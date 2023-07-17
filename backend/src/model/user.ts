@@ -13,20 +13,6 @@ export default class UserModel implements IModelUser<TUser> {
     return user;
   }
 
-  update = async ({ login, password, name }: TUser): Promise<Partial<TUser>> => {
-    const useUpdated = await prisma.user.update({
-      where: {
-        login: login,
-      },
-      data: {
-        password,
-        name,
-      }
-    });
-    
-    return useUpdated;
-  }
-
   create = async ({ login, password, name }: TUser): Promise<Partial<TUser>> => {
     const createUser = await prisma.user.create({
       data: {

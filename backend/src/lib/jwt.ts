@@ -5,10 +5,10 @@ import BadRequest from '../error/BadRequest';
 
 dotenv.config()
 
-const SUPER_SECRET = process.env.JWT_SECRET ?? '123456789';
+const SUPER_SECRET = 'teste aqui';
 
 export const jwtHash = (info: Partial<TUser>): string => {
-  const token = jwt.sign(info, SUPER_SECRET, { algorithm: 'RS256', expiresIn: '1D' });
+  const token = jwt.sign(info, SUPER_SECRET, { algorithm: 'HS256', expiresIn: '1d' });
   return token;
 }
 
