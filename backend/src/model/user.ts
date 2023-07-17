@@ -3,7 +3,7 @@ import { IModelUser } from "../interface/User";
 import { prisma } from "../lib/prisma";
 
 export default class UserModel implements IModelUser<TUser> {
-  readOne = async (login: string): Promise<TUser> => {
+  readOne = async (login: string): Promise<TUser | null> => {
     const user = await prisma.user.findFirstOrThrow({
       where: {
         login: login,
