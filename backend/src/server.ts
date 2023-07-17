@@ -19,5 +19,5 @@ app.register(cors, {
 app.listen({
   port: PORT_API,
   }).then(()=> {
-    console.log(`HTTP server in port ${databaseURL}`)
+    console.log(`HTTP server in port ${PORT_API}`)
   });
