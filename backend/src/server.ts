@@ -8,6 +8,8 @@ dotenv.config()
 const PORT_API = process.env
   .API_PORT ? parseInt(process.env.API_PORT, 10) : 3001;
 
+const databaseURL = process.env.DATABASE_URL ?? 'deu não!';
+
 const app = fastify();
 
 app.register(cors, {
@@ -17,5 +19,5 @@ app.register(cors, {
 app.listen({
   port: PORT_API,
   }).then(()=> {
-    console.log(`HTTP server in port ${PORT_API}`)
+    console.log(`HTTP server in port ${databaseURL}`)
   });

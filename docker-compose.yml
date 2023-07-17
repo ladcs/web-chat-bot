@@ -37,6 +37,7 @@ services:
       - DB_HOST=db
       - DB_PORT=${DB_PORT}
       - DB_NAME=chatbot
+      - DATABASE_URL=mysql://root:${MYSQL_PASSWORD}@db:3306/chatbot
   db:
     image: mysql:8.0.21
     container_name: db
@@ -44,8 +45,10 @@ services:
     ports:
       - ${DB_PORT}:3306
     environment:
+      - MYSQL_GRANTS=CREATE USER 'root'@'db' IDENTIFIED BY '${MYSQL_PASSWORD}'; GRANT ALL ON chatbot.* TO 'root'@'db';
       - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=chatbot
+      - MYSQL_PID_FILE=/var/run/mysqld/mysqld.pid
     restart: 'always'
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]

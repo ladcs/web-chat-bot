@@ -14,4 +14,4 @@ EXPOSE 3001
 
 COPY . .
 
-CMD ["npm","start"]
+CMD ["npm","start", "prisma", "generate"]
