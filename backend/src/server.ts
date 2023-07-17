@@ -8,7 +8,7 @@ dotenv.config()
 const PORT_API = process.env
   .API_PORT ? parseInt(process.env.API_PORT, 10) : 3001;
 
-const databaseURL = process.env.DATABASE_URL ?? 'deu não!';
+const BYCRIPT_SECRET = process.env.BYCRIPT_SECRET ?? 'deu não!';
 
 const app = fastify();
 

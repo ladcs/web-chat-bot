@@ -32,12 +32,10 @@ services:
       db:
         condition: service_healthy
     environment:
-      - DB_USER=root
+      - BYCRIPT_SECRET=${BYCRIPT_SECRET}
+      - BACKEND_PORT=${BACKEND_PORT}
       - DB_PASSWORD=${MYSQL_PASSWORD}
-      - DB_HOST=db
-      - DB_PORT=${DB_PORT}
-      - DB_NAME=chatbot
-      - DATABASE_URL=mysql://root:${MYSQL_PASSWORD}@db:3306/chatbot
+      - DATABASE_URL=mysql://root:${MYSQL_PASSWORD}@db:${DB_PORT}/chatbot
   db:
     image: mysql:8.0.21
     container_name: db

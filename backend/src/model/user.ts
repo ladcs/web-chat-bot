@@ -3,27 +3,40 @@ import { IModelUser } from "../interface/User";
 import { prisma } from "../lib/prisma";
 
 export default class UserModel implements IModelUser<TUser> {
-  readOne = async (login: String): Promise<TUser| null> => {
-    const user = await prisma.user.findFirst({
+  readOne = async (login: string): Promise<TUser> => {
+    const user = await prisma.user.findFirstOrThrow({
+      where: {
+        login: login,
+      },
+    });
+
+    return user;
+  }
+
+  update = async ({ login, password, name }: TUser): Promise<Partial<TUser>> => {
+    const useUpdated = await prisma.user.update({
       where: {
         login: login,
       },
       data: {
-        
+        password,
+        name,
       }
     });
-    return user
+    
+    return useUpdated;
   }
-  update = async (obj: TUser): Promise<TUser | null> => {
-    const useUpdated = await prisma.user.update({
-      where: {
-        login: obj.login,
-      },
+
+  create = async ({ login, password, name }: TUser): Promise<Partial<TUser>> => {
+    const createUser = await prisma.user.create({
+      data: {
+        login,
+        password,
+        name,
+      }
     });
-    throw new Error("Method not implemented.");
-  }
-  create(obj: TUser): Promise<TUser | null> {
-    throw new Error("Method not implemented.");
+    
+    return { login: createUser.login, name: createUser.name }
   }
 
 }

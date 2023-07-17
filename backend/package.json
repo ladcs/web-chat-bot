@@ -5,6 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "docker": "prestart",
     "prestart": "npx prisma generate && npx prisma migrate dev --name init",
     "start": "tsx src/server.ts",
     "dev": "tsx watch src/server.ts"
@@ -23,6 +24,7 @@
     "@fastify/jwt": "^7.2.0",
     "@prisma/client": "^5.0.0",
     "@types/node": "^20.4.2",
+    "bcrypt": "^5.1.0",
     "dotenv": "^16.3.1",
     "fastify": "^4.19.2",
     "prisma": "^5.0.0",
