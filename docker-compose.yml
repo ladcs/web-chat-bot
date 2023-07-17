@@ -32,6 +32,7 @@ services:
       db:
         condition: service_healthy
     environment:
+      - JWT_SECRET=${JWT_SECRET}
       - BYCRIPT_SECRET=${BYCRIPT_SECRET}
       - BACKEND_PORT=${BACKEND_PORT}
       - DB_PASSWORD=${MYSQL_PASSWORD}
