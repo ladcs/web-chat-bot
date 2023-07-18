@@ -4,13 +4,14 @@ import { Button } from "./ui/button";
 import { Card, CardFooter } from "./ui/card";
 import { Input } from "./ui/input";
 import { useChat } from 'ai/react'
-import { FormEvent } from "react";
+import { FormEvent, useEffect } from "react";
 import { v4 } from 'uuid';
 import { loginOrRegister } from "@/lib/utils";
 import { ChatHeader } from "./ChatHeader";
 import { ContentChat } from "./ContentChat";
 import { ScrollArea } from "./ui/scroll-area";
-import { useGlobalContext } from '../app/Context/chatbot'
+import { useGlobalContext } from '../app/Context/chatbot';
+import jwt_decode from "jwt-decode";
 
 interface IMessage {
   content: string,
@@ -21,7 +22,25 @@ interface IMessage {
 
 export function Chat() {
   const { messages, input, handleInputChange, handleSubmit, setMessages, setInput } = useChat();
-  const { isLoged } = useGlobalContext();
+  const { isLoged, setIsLoged, setName } = useGlobalContext();
+
+  useEffect(()=> {
+    const token = localStorage.getItem('token');
+    if (token !== null) {
+      const decodeToken = jwt_decode(token);
+      //@ts-ignore
+      if(decodeToken.exp * 1000 < Date.now()) {
+        setIsLoged(false);
+      } else {
+        //@ts-ignore
+        setName(token.name)
+        setIsLoged(true);
+      }
+    } else {
+      setIsLoged(false);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   
   const activedChat = (e: FormEvent) => {
     e.preventDefault();
