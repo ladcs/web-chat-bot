@@ -1,9 +1,9 @@
-import Image from 'next/image'
+import { Chat } from '@/components/Chat'
 
 export default function Home() {
   return (
-    <h1>
-      HELLO WORLD
-    </h1>
+    <div className='flex items-center min-h-screen bg-slate-300 justify-center'>
+      <Chat />
+    </div>
   )
 }
