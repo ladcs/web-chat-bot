@@ -3,7 +3,7 @@ import UserModel from "../model/user";
 import BadRequest from "../error/BadRequest";
 import { crypto, verify } from "../lib/bcrypt";
 import NotFound from "../error/NotFound";
-import { jwtHash, jwtVerify } from "../lib/jwt";
+import { jwtHash } from "../lib/jwt";
 import userSchema from "../schema/NewUser";
 
 export default class UserService {

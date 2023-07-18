@@ -8,7 +8,7 @@ dotenv.config()
 const SUPER_SECRET = 'teste aqui';
 
 export const jwtHash = (info: Partial<TUser>): string => {
-  const token = jwt.sign(info, SUPER_SECRET, { algorithm: 'HS256', expiresIn: '1d' });
+  const token = jwt.sign(info, SUPER_SECRET, { algorithm: 'HS256', expiresIn: '30d' });
   return token;
 }
 
