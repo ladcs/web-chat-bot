@@ -1,4 +1,4 @@
-import { LoginOrRegister } from "./LoginOrRegister";
+import { ToLoginPage } from "./toLoginPage";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 interface MessageProps {
@@ -11,7 +11,8 @@ export function MessageInChat({role, content}: MessageProps) {
 
   const renderContent = () => {
     const areDiv = content.split('div class="bg-gray-50 rounded-md">');
-    if(areDiv[0] === '<') return <LoginOrRegister />
+    if(areDiv[0] === '<') return <ToLoginPage
+   />
     return <p className='leading-relaxed pl-3'>{content}</p>
   }
 

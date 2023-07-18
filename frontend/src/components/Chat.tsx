@@ -4,12 +4,13 @@ import { Button } from "./ui/button";
 import { Card, CardFooter } from "./ui/card";
 import { Input } from "./ui/input";
 import { useChat } from 'ai/react'
-import { useState, FormEvent } from "react";
+import { FormEvent } from "react";
 import { v4 } from 'uuid';
 import { loginOrRegister } from "@/lib/utils";
 import { ChatHeader } from "./ChatHeader";
 import { ContentChat } from "./ContentChat";
 import { ScrollArea } from "./ui/scroll-area";
+import { useGlobalContext } from '../app/Context/chatbot'
 
 interface IMessage {
   content: string,
@@ -20,32 +21,30 @@ interface IMessage {
 
 export function Chat() {
   const { messages, input, handleInputChange, handleSubmit, setMessages, setInput } = useChat();
-  const [isActive, setIsActive] = useState(false);
-  const [isLogged, setIsLogged] = useState(false);
+  const { isLoged } = useGlobalContext();
+  
   const activedChat = (e: FormEvent) => {
     e.preventDefault();
-    if(!isLogged) {
-      const commandToBegin = ['HELLO', 'GOOD', 'I WANT'];
+    if (!isLoged) {
+      const commandToBegin = ['HELLO', 'GOOD', 'I WANT', 'Goodbye'];
       const upperInput = input.toUpperCase();
-      const msgUser: IMessage = {
-        content: input,
-        createdAt: new Date(),
-        role: 'user',
-        id: v4(),
-      }
-      setMessages([...messages, msgUser]);
-      if(commandToBegin.includes(upperInput)) {
+      if (commandToBegin.includes(upperInput)) {
+        const msgUser: IMessage = {
+          content: input,
+          createdAt: new Date(),
+          role: 'user',
+          id: v4(),
+        }
         const msgAssist: IMessage = {
           content: loginOrRegister(),
           createdAt: new Date(),
           role: 'assistant',
           id: v4(),
         }
-        setIsActive(true);
         setMessages([...messages, msgUser, msgAssist]);
       } 
-      setInput('');
     }
+    setInput('');
   }
 
   return (
