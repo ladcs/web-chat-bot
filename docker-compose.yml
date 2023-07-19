@@ -8,11 +8,11 @@ services:
       - './frontend:/app'
     ports:
       - ${FRONTEND_PORT}:3000
-    environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
     depends_on:
       backend:
         condition: service_healthy
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
     healthcheck:
       test: ["CMD", "lsof", "-t", "-i:3000"]
       timeout: 10s
@@ -54,5 +54,3 @@ services:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 10s
       retries: 5
-    cap_add:
-      - SYS_NICE
