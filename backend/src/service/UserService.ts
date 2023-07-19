@@ -1,4 +1,4 @@
-import { TUser } from "../schema/User";
+import { TUser } from "../type/User";
 import UserModel from "../model/user";
 import BadRequest from "../error/BadRequest";
 import { crypto, verify } from "../lib/bcrypt";

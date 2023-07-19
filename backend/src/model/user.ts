@@ -1,4 +1,4 @@
-import { TUser } from "../schema/User";
+import { TUser } from "../type/User";
 import { IModelUser } from "../interface/User";
 import { prisma } from "../lib/prisma";
 
