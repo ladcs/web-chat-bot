@@ -16,6 +16,7 @@ export default class UserController {
   ): Promise<Response | void> => {
     try {
       const  { user, date } = req.body;
+      console.log(date)
       const created = await this.service.create({user, date});
       return res.status(StatusCodes.OK).json(created);
     } catch (error) {
@@ -23,7 +24,7 @@ export default class UserController {
     }
   };
 
-  readAll = async (req: Request,
+  readAll = async (_req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<Response | void> => {

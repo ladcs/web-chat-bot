@@ -8,6 +8,8 @@ services:
       - './frontend:/app'
     ports:
       - ${FRONTEND_PORT}:3000
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
     depends_on:
       backend:
         condition: service_healthy

@@ -14,6 +14,7 @@ import { ScrollArea } from "./ui/scroll-area";
 import { useGlobalContext } from '../app/Context/chatbot';
 import jwt_decode from "jwt-decode";
 import { useRouter } from "next/navigation";
+import { api } from "@/lib/axios";
 
 interface IMessage {
   content: string,
@@ -83,8 +84,8 @@ export function Chat() {
 
     }
     if(isLoged) {
-      const uperInput = input.toUpperCase();
-      const haveLoan = uperInput.split(' ');
+      const upperInput = input.toUpperCase();
+      const haveLoan = upperInput.split(' ');
       if(haveLoan.includes('LOAN')) {
         const msgUser: IMessage = {
           content: input,
@@ -101,9 +102,18 @@ export function Chat() {
         setMessages([...messages, msgUser, msgAssist]);
         setContextMessages([...messages, msgUser, msgAssist]);
       }
-      if (uperInput === 'GOODBYE') {
+      if (upperInput === 'GOODBYE') {
         setIsActive(false);
-        setContextMessages([...messages]);
+        setContextMessages([]);
+        const toDbInfo = {
+          user: name,
+          date: new Date().toISOString(),
+        }
+        api.post('/chat', toDbInfo).then()
+        .catch(err => alert(err));
+        localStorage.removeItem('token');
+        setName('');
+        setIsLoged(false);
         router.push('/export');
       }
       if (isActive) {
@@ -113,8 +123,10 @@ export function Chat() {
           role: 'user',
           id: v4(),
         }
-        //@ts-ignore
-        handleSubmit(e, msgUser);
+        if (upperInput !== 'GOODBYE') {
+          //@ts-ignore
+          handleSubmit(e, msgUser);
+        }
       }
     }
     setInput('');

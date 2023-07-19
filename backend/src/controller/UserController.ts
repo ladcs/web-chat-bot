@@ -16,7 +16,7 @@ export default class UserController {
   ): Promise<Response | void> => {
     try {
       const  { login, password } = req.body;
-      const token = await this.service.login({login, password})
+      const token = await this.service.login({login, password});
       return res.status(StatusCodes.OK).json(token);
     } catch (error) {
       next(error);

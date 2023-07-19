@@ -18,8 +18,8 @@ export default class UserService {
     if (!login || !password) throw new BadRequest('all field must have value');
     const user = await this.model.readOne(login);
     if (!user) throw new NotFound('user or password not match');
-    const logged = verify(password, user.password);
-    if(!logged) throw new NotFound('user or password not match');
+    const loged = await verify(password, user.password);
+    if(!loged) throw new NotFound('user or password not match');
     const token = jwtHash({ login: user.login, name: user.name });
     return token;
   }

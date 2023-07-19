@@ -1,11 +1,15 @@
 import { Router } from 'express';
-import UserService from '../controller/UserController';
+import UserController from '../controller/UserController';
+import ChatController from '../controller/ChatController';
 
 const app = Router();
 
-const controller = new UserService();
+const userController = new UserController();
+const chatController = new ChatController();
 
-app.post('/login', controller.login);
-app.post('/register', controller.createUser);
+app.post('/login', userController.login);
+app.post('/register', userController.createUser);
+app.post('/chat', chatController.create);
+app.get('/chat', chatController.readAll);
 
 export default app;
