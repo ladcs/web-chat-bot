@@ -16,6 +16,8 @@ interface ContextProps {
   setName: Dispatch<SetStateAction<string>>,
   contextMessages: Array<IMessage>,
   setContextMessages: Dispatch<SetStateAction<IMessage[]>>,
+  isActive: boolean,
+  setIsActive: Dispatch<SetStateAction<boolean>>,
 }
 
 const GlobalContext = createContext<ContextProps>({
@@ -25,12 +27,15 @@ const GlobalContext = createContext<ContextProps>({
   setName: (): string => '',
   contextMessages: [],
   setContextMessages: (): IMessage[] => [],
+  isActive: false,
+  setIsActive: (): boolean => false,
 })
 
 export const GlobalContextProvider = ({ children }: any) => {
   const [isLoged, setIsLoged] = useState(false);
   const [name, setName] = useState('');
   const [contextMessages, setContextMessages] = useState<IMessage[]>([]);
+  const [isActive, setIsActive] = useState(false);
 
   return (
     <GlobalContext.Provider value={{
@@ -39,7 +44,9 @@ export const GlobalContextProvider = ({ children }: any) => {
       isLoged,
       setIsLoged,
       name,
-      setName
+      setName,
+      isActive,
+      setIsActive,
       }}>
       {children}
     </GlobalContext.Provider>

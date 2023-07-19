@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 import { Card, CardFooter } from "./ui/card";
 import { Input } from "./ui/input";
 import { useChat } from 'ai/react'
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect } from "react";
 import { v4 } from 'uuid';
 import { loginOrRegister, toLoan } from "@/lib/utils";
 import { ChatHeader } from "./ChatHeader";
@@ -13,6 +13,7 @@ import { ContentChat } from "./ContentChat";
 import { ScrollArea } from "./ui/scroll-area";
 import { useGlobalContext } from '../app/Context/chatbot';
 import jwt_decode from "jwt-decode";
+import { useRouter } from "next/navigation";
 
 interface IMessage {
   content: string,
@@ -23,7 +24,9 @@ interface IMessage {
 
 export function Chat() {
   const { messages, input, handleInputChange, handleSubmit, setMessages, setInput } = useChat();
-  const { isLoged, setIsLoged, setName, contextMessages, setContextMessages, name } = useGlobalContext();
+  const { isLoged, setIsLoged, setName, contextMessages, setContextMessages, name, isActive, setIsActive } = useGlobalContext();
+
+  const router = useRouter();
 
   useEffect(()=> {
     const token = localStorage.getItem('token');
@@ -57,10 +60,11 @@ export function Chat() {
   
   const sendMessage = (e: FormEvent) => {
     e.preventDefault();
-    if (!isLoged) {
+    if (!isActive) {
       const commandToBegin = ['HELLO', 'GOOD', 'I WANT', 'Goodbye'];
       const upperInput = input.toUpperCase();
       if (commandToBegin.includes(upperInput)) {
+        setIsActive(true);
         const msgUser: IMessage = {
           content: input,
           createdAt: new Date(),
@@ -79,7 +83,8 @@ export function Chat() {
 
     }
     if(isLoged) {
-      const haveLoan = input.toUpperCase().split(' ')
+      const uperInput = input.toUpperCase();
+      const haveLoan = uperInput.split(' ');
       if(haveLoan.includes('LOAN')) {
         const msgUser: IMessage = {
           content: input,
@@ -95,6 +100,21 @@ export function Chat() {
         }
         setMessages([...messages, msgUser, msgAssist]);
         setContextMessages([...messages, msgUser, msgAssist]);
+      }
+      if (uperInput === 'GOODBYE') {
+        setIsActive(false);
+        setContextMessages([...messages]);
+        router.push('/export');
+      }
+      if (isActive) {
+        const msgUser: IMessage = {
+          content: input,
+          createdAt: new Date(),
+          role: 'user',
+          id: v4(),
+        }
+        //@ts-ignore
+        handleSubmit(e, msgUser);
       }
     }
     setInput('');
