@@ -9,7 +9,7 @@ export function Begin() {
       <AvatarImage src={cbImage} />
     </Avatar>
     <div className="bg-gray-50 rounded-md mb-3">
-    <p className='leading-relaxed pl-3'>To start digit: Hello or Good or I want, and Goodbye when end.</p>
+      <p className='leading-relaxed pl-3'>To start digit: Hello or Good or I want, and Goodbye to end.</p>
     </div>
   </div>)
 }

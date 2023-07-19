@@ -1,12 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import { Button } from "./ui/button";
 import { Card, CardFooter } from "./ui/card";
 import { Input } from "./ui/input";
 import { useChat } from 'ai/react'
-import { FormEvent, useEffect } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { v4 } from 'uuid';
-import { loginOrRegister } from "@/lib/utils";
+import { loginOrRegister, toLoan } from "@/lib/utils";
 import { ChatHeader } from "./ChatHeader";
 import { ContentChat } from "./ContentChat";
 import { ScrollArea } from "./ui/scroll-area";
@@ -22,10 +23,11 @@ interface IMessage {
 
 export function Chat() {
   const { messages, input, handleInputChange, handleSubmit, setMessages, setInput } = useChat();
-  const { isLoged, setIsLoged, setName } = useGlobalContext();
+  const { isLoged, setIsLoged, setName, contextMessages, setContextMessages, name } = useGlobalContext();
 
   useEffect(()=> {
     const token = localStorage.getItem('token');
+    setMessages([...contextMessages])
     if (token !== null) {
       const decodeToken = jwt_decode(token);
       //@ts-ignore
@@ -33,16 +35,27 @@ export function Chat() {
         setIsLoged(false);
       } else {
         //@ts-ignore
-        setName(token.name)
+        setName(decodeToken.name)
         setIsLoged(true);
       }
     } else {
       setIsLoged(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    if(name !== null) {
+      const helloUser: IMessage = {
+        content: `Hello, ${name}, what can I help you?`,
+        createdAt: new Date(),
+        role: 'assistant',
+        id: v4(),
+      }
+        setContextMessages([...contextMessages, helloUser]);
+      }
+  }, [name])
   
-  const activedChat = (e: FormEvent) => {
+  const sendMessage = (e: FormEvent) => {
     e.preventDefault();
     if (!isLoged) {
       const commandToBegin = ['HELLO', 'GOOD', 'I WANT', 'Goodbye'];
@@ -61,7 +74,28 @@ export function Chat() {
           id: v4(),
         }
         setMessages([...messages, msgUser, msgAssist]);
-      } 
+        setContextMessages([...messages, msgUser, msgAssist]);
+      }
+
+    }
+    if(isLoged) {
+      const haveLoan = input.toUpperCase().split(' ')
+      if(haveLoan.includes('LOAN')) {
+        const msgUser: IMessage = {
+          content: input,
+          createdAt: new Date(),
+          role: 'user',
+          id: v4(),
+        }
+        const msgAssist: IMessage = {
+          content: toLoan(),
+          createdAt: new Date(),
+          role: 'assistant',
+          id: v4(),
+        }
+        setMessages([...messages, msgUser, msgAssist]);
+        setContextMessages([...messages, msgUser, msgAssist]);
+      }
     }
     setInput('');
   }
@@ -73,9 +107,9 @@ export function Chat() {
       <ContentChat messages={messages}/>
     </ScrollArea>
     <CardFooter>
-      <form className="w-full flex gap-2" onSubmit={activedChat}>
-        <Input placeholder='to begin' value={input} onChange={handleInputChange} />
-        <Button type='button' onClick={activedChat}>send</Button>
+      <form className="w-full flex gap-2" onSubmit={sendMessage}>
+        <Input placeholder='digit your message' value={input} onChange={handleInputChange} />
+        <Button type='button' onClick={sendMessage}>send</Button>
       </form>
     </CardFooter>
   </Card>)
